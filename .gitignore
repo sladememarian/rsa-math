@@ -1,0 +1,5 @@
+# Compiled output
+bin/
+
+# Private docs (not part of the public repo)
+private_docs/
