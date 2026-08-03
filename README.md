@@ -22,13 +22,29 @@ Main idea: generate secure RSA key pairs, encrypt/decrypt numerical and text pay
 rsa-discrete-math-java/
 ├── src/
 │   └── main/java/com/rsa/
-│       ├── math/          # Euclidean math, modular exponentiation, Miller-Rabin, key generator, text encoder
-│       ├── crypto/        # RSA engine, digital signatures, Wiener attack, ECC comparison
-│       └── Main.java      # Interactive CLI entry point
-├── tests/                 # Integration and unit test suite
-├── docs/                  # Mathematical decryption proof & security report
-├── benchmarks/            # Modulus factorization execution analysis
-├── data/                  # Inputs, outputs, sample Persian texts, generated CSV benchmark data
+│       ├── math/                          <-- Leader (Amirpouyan)
+│       │   ├── EuclideanMath.java         [Task 1 - Amirpouyan]
+│       │   ├── ModularExponentiation.java [Task 2 - Amirpouyan]
+│       │   ├── MillerRabinPrimality.java  [Task 3 - Amirpouyan]
+│       │   ├── RsaKeyGenerator.java       [Task 4 - Amirpouyan]
+│       │   └── TextEncoder.java           [Task 5 - Amirpouyan]
+│       ├── crypto/                        <-- Nima
+│       │   ├── RsaEngine.java             [Task 6 - Nima]
+│       │   ├── DigitalSignature.java      [Task 7 - Nima]
+│       │   ├── WienerAttack.java          [Task 8 - Nima]
+│       │   └── EccComparison.java         [Task 9 - Nima]
+│       └── Main.java                      [Task 15 - Moradi]
+├── tests/
+│   └── CryptoIntegrationTest.java         [Task 10 - Nima]
+├── docs/
+│   ├── proof_euler.md                     [Task 11 - Moradi]
+│   └── security_report.md                 [Task 14 - Moradi]
+├── benchmarks/
+│   ├── FactorizationBenchmark.java        [Task 12 - Moradi]
+│   └── BenchmarkExporter.java             [Task 13 - Moradi]
+├── data/                                  <-- Shared Data Folder
+│   ├── sample_persian_text.txt
+│   └── factorization_results.csv
 └── README.md
 ```
 
