@@ -1,16 +1,18 @@
 # RSA Cryptosystem & Discrete Mathematics Analysis (Java)
 
-A comprehensive, zero-dependency Java implementation of the RSA Cryptosystem created for the Discrete Mathematics university project. This repository includes key pair generation, Miller-Rabin primality testing, fast modular exponentiation, Persian text encoding, digital signatures, cryptanalysis attacks, and performance benchmarking.
+A zero-dependency Java implementation of a complete public-key RSA cryptosystem built from first principles, created as a Discrete Mathematics course project at K. N. Toosi University of Technology. The project explores discrete math topics including modular arithmetic, Miller-Rabin primality testing, Extended Euclidean inverse computation, fast modular exponentiation, and cryptanalysis — all without external cryptography libraries.
+
+Main idea: generate secure RSA key pairs, encrypt/decrypt numerical and text payloads, prove decryption correctness via Euler's Totient Theorem, and benchmark modulus factorization to demonstrate RSA security in practice.
 
 ---
 
-## 👥 Team Members & Contributions (شرح مشارکت اعضا)
+## 👥 Team Members & Contributions
 
 | Member | Role | Contribution Description |
 | :--- | :--- | :--- |
-| **Amirpouyan (Leader)** | Core Math & Key Gen | Implemented Euclidean & Extended Euclidean algorithms, Fast Modular Exponentiation, Miller-Rabin Primality Test, 1024-bit RSA Key Pair Generator, and Persian UTF-8 Byte Text Encoder (`com.rsa.math`). |
-| **Nima** | Crypto Engine & Security | Implemented core RSA Encryption/Decryption engine, RSA Digital Signatures, Wiener's Attack via continued fractions, ECC vs RSA benchmark helper, and unit test suite (`com.rsa.crypto`, `tests/`). |
-| **Moradi** | Analysis & Benchmarks | Authored formal mathematical decryption proofs via Euler's Totient Theorem, implemented prime factorizers (Trial Division / Pollard's Rho), benchmark data exporters (`data/`), security report, and CLI `Main.java`. |
+| **Amirpouyan Memarian (Leader)** | Core Math & Key Gen | Implemented Euclidean & Extended Euclidean algorithms, fast modular exponentiation, Miller-Rabin primality testing, 1024-bit RSA key pair generator, and Persian UTF-8 byte text encoder (`com.rsa.math`). |
+| **Nima** | Crypto Engine & Security | Implemented the core RSA encryption/decryption engine, RSA digital signatures, Wiener's Attack via continued fractions, ECC vs RSA benchmark helper, and the integration test suite (`com.rsa.crypto`, `tests/`). |
+| **Moradi** | Analysis & Benchmarks | Authored formal mathematical decryption proofs via Euler's Totient Theorem, implemented prime factorizers (Trial Division / Pollard's Rho), benchmark data exporters, the security report, and the interactive CLI entry point. |
 
 ---
 
@@ -20,12 +22,48 @@ A comprehensive, zero-dependency Java implementation of the RSA Cryptosystem cre
 rsa-discrete-math-java/
 ├── src/
 │   └── main/java/com/rsa/
-│       ├── math/          # Euclidean math, Miller-Rabin, Key Generator, Persian Text Encoder
-│       ├── crypto/        # RSA Engine, Digital Signatures, Wiener Attack, ECC Comparison
-│       ├── analysis/      # Factorization Benchmarking & Exporters
-│       └── Main.java      # Interactive CLI Entry Point
-├── tests/                 # Integration and Unit Test Suite
-├── docs/                  # Mathematical Decryption Proof & Security Report
-├── benchmarks/            # Modulus Factorization Execution Analysis Scripts
+│       ├── math/          # Euclidean math, modular exponentiation, Miller-Rabin, key generator, text encoder
+│       ├── crypto/        # RSA engine, digital signatures, Wiener attack, ECC comparison
+│       └── Main.java      # Interactive CLI entry point
+├── tests/                 # Integration and unit test suite
+├── docs/                  # Mathematical decryption proof & security report
+├── benchmarks/            # Modulus factorization execution analysis
 ├── data/                  # Inputs, outputs, sample Persian texts, generated CSV benchmark data
 └── README.md
+```
+
+---
+
+## 🛠️ Install Dependencies
+
+No third-party dependencies. Only requires:
+
+- **JDK 11 or later** (uses native `java.math.BigInteger` for arbitrary-precision arithmetic)
+
+Verify your JDK:
+
+```sh
+java -version
+```
+
+---
+
+## 💻 How to Run
+
+Compile all sources:
+
+```sh
+javac -d bin src/main/java/com/rsa/math/*.java src/main/java/com/rsa/crypto/*.java benchmarks/*.java src/main/java/com/rsa/Main.java tests/*.java
+```
+
+Run the interactive CLI application:
+
+```sh
+java -cp bin com.rsa.Main
+```
+
+Run the integration tests:
+
+```sh
+java -cp bin CryptoIntegrationTest
+```
