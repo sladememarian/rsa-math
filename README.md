@@ -69,17 +69,19 @@ java -version
 Compile all sources:
 
 ```sh
-javac -d bin src/main/java/com/rsa/math/*.java src/main/java/com/rsa/crypto/*.java benchmarks/*.java src/main/java/com/rsa/Main.java tests/*.java
+javac -encoding UTF-8 -d bin src/main/java/com/rsa/math/*.java src/main/java/com/rsa/crypto/*.java tests/*.java
 ```
 
-Run the interactive CLI application:
+Run the integration test suite:
 
 ```sh
-java -cp bin com.rsa.Main
+java -ea -cp bin tests.CryptoIntegrationTest
 ```
 
-Run the integration tests:
+Run the RSA vs ECC benchmark comparison:
 
 ```sh
-java -cp bin CryptoIntegrationTest
+java -cp bin com.rsa.crypto.EccComparison
 ```
+
+> Note: the interactive CLI (`Main.java`) and `benchmarks/` are part of the `feature/analysis-docs` branch and are merged at a later stage.
