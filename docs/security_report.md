@@ -3,6 +3,7 @@
 ## 1. Miller-Rabin Primality Testing & Error Bounds
 
 The Miller-Rabin primality test is a probabilistic test based on strong pseudoprimes.
+_(Note: This is actively implemented in our framework under `com.rsa.math.MillerRabinPrimality`)_
 
 ### Error Probability Bound
 
@@ -18,6 +19,7 @@ $$P(\text{Composite } n \text{ declared prime}) \le 4^{-k}$$
 ## 2. Minimum Safe Modulus Bit-Lengths
 
 The security of RSA depends on the difficulty of factoring $n = p \cdot q$.
+_(Refer to `com.rsa.crypto.EccComparison` for performance benchmarks of standard bit-lengths)._
 
 - **Small Modulus ($\le 512$ bits):** Vulnerable to General Number Field Sieve (GNFS) and modern cluster factoring. Easily broken.
 - **1024-bit Modulus:** Considered vulnerable to state-level adversaries; no longer recommended for cryptographic security.
@@ -29,6 +31,7 @@ The security of RSA depends on the difficulty of factoring $n = p \cdot q$.
 ## 3. Wiener's Attack on Small Private Exponents
 
 Wiener's attack uses continued fractions to recover the secret exponent $d$ in polynomial time if $d$ is too small relative to $n$.
+_(Note: Our framework includes a functional attack module in `com.rsa.crypto.WienerAttack` to demonstrate this vulnerability)._
 
 ### Vulnerability Threshold
 
@@ -37,4 +40,4 @@ $$d < \frac{1}{3} n^{1/4}$$
 
 The continued fraction expansion of $\frac{e}{n}$ will produce a convergent fraction $\frac{k}{d}$ that reveals $d$.
 
-**Mitigation:** Always choose standard large public exponents like $e = 65537$ ($2^{16}+1$) to ensure $d$ is large enough ($d \approx n$).
+**Mitigation:** Always choose standard large public exponents like $e = 65537$ ($2^{16}+1$) to ensure $d$ is large enough ($d \approx n$). Our `RsaKeyGenerator` enforces this standard exponent.

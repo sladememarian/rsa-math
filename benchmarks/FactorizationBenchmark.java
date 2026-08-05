@@ -1,5 +1,6 @@
 package benchmarks;
 
+import com.rsa.math.EuclideanMath;
 import java.math.BigInteger;
 
 public class FactorizationBenchmark {
@@ -33,7 +34,10 @@ public class FactorizationBenchmark {
         while (d.equals(BigInteger.ONE)) {
             x = f(x, c, n);
             y = f(f(y, c, n), c, n);
-            d = x.subtract(y).abs().gcd(n);
+
+            // Replaced BigInteger.gcd with custom EuclideanMath.gcd
+            BigInteger absDiff = x.subtract(y).abs();
+            d = EuclideanMath.gcd(absDiff, n);
 
             if (d.equals(n)) {
                 // Retry with different random constant if cycle fails

@@ -2,6 +2,9 @@ package com.rsa;
 
 import benchmarks.BenchmarkExporter;
 import benchmarks.FactorizationBenchmark;
+import com.rsa.math.RsaKeyGenerator;
+import com.rsa.crypto.EccComparison;
+import tests.CryptoIntegrationTest;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -14,15 +17,17 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         System.out.println("====================================================");
         System.out.println("   🔐 RSA Cryptosystem & Discrete Math Framework    ");
-        System.out.println("   K. N. Toosi University of Technology  ");
+        System.out.println("   K. N. Toosi University of Technology             ");
         System.out.println("====================================================");
 
         boolean running = true;
         while (running) {
             System.out.println("\nSelect an option:");
             System.out.println("1. Run Factorization Benchmark (Trial Division vs Pollard's Rho)");
-            System.out.println("2. Display Proof and Security Analysis Summary");
-            System.out.println("3. Exit");
+            System.out.println("2. Run RSA vs ECC Performance Comparison");
+            System.out.println("3. Run Full Crypto Integration Tests");
+            System.out.println("4. Display Proof and Security Analysis Summary");
+            System.out.println("5. Exit");
             System.out.print("> ");
 
             String choice = scanner.nextLine().trim();
@@ -31,9 +36,17 @@ public class Main {
                     executeBenchmarkFlow();
                     break;
                 case "2":
-                    displayDocsSummary();
+                    System.out.println("\n[+] Running RSA vs ECC Benchmark...");
+                    EccComparison.main(new String[] { "5" });
                     break;
                 case "3":
+                    System.out.println("\n[+] Running Integration Tests...");
+                    CryptoIntegrationTest.main(new String[] {});
+                    break;
+                case "4":
+                    displayDocsSummary();
+                    break;
+                case "5":
                     running = false;
                     System.out.println("Exiting framework. Goodbye!");
                     break;
@@ -48,11 +61,11 @@ public class Main {
         System.out.println("\n[+] Running Factorization Benchmarks...");
         List<FactorizationBenchmark.BenchmarkResult> results = new ArrayList<>();
 
-        // Test modulus values of varying bit-length
         int[] bitSizes = { 16, 24, 32, 40, 48 };
         for (int bits : bitSizes) {
-            BigInteger p = BigInteger.probablePrime(bits / 2, new java.util.Random());
-            BigInteger q = BigInteger.probablePrime(bits / 2, new java.util.Random());
+            int primeBits = bits / 2;
+            BigInteger p = RsaKeyGenerator.randomPrime(primeBits, 20);
+            BigInteger q = RsaKeyGenerator.randomPrime(primeBits, 20);
             BigInteger n = p.multiply(q);
 
             FactorizationBenchmark.BenchmarkResult res = FactorizationBenchmark.runBenchmark(n, bits);
