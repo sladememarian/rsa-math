@@ -29,33 +29,6 @@ public class WienerAttack {
             return new ContinuedFraction(terms);
         }
 
-        public List<BigInteger> getConvergents() {
-            List<BigInteger> convergents = new ArrayList<>();
-            if (terms.isEmpty()) return convergents;
-
-            BigInteger p0 = terms.get(0);
-            BigInteger p1 = BigInteger.ONE;
-            BigInteger q0 = BigInteger.ONE;
-            BigInteger q1 = BigInteger.ZERO;
-
-            convergents.add(p0);
-
-            for (int i = 1; i < terms.size(); i++) {
-                BigInteger a = terms.get(i);
-                BigInteger p2 = a.multiply(p1).add(p0);
-                BigInteger q2 = a.multiply(q1).add(q0);
-
-                convergents.add(p2);
-                convergents.add(q2);
-
-                p0 = p1;
-                p1 = p2;
-                q0 = q1;
-                q1 = q2;
-            }
-            return convergents;
-        }
-
         public List<BigInteger[]> getConvergentPairs() {
             List<BigInteger[]> pairs = new ArrayList<>();
             if (terms.isEmpty()) return pairs;
@@ -143,8 +116,7 @@ public class WienerAttack {
     }
 
     public static boolean isVulnerable(BigInteger d, BigInteger n) {
-        BigInteger bound = n.sqrt().sqrt().multiply(BigInteger.valueOf(3)).divide(BigInteger.valueOf(3));
-        return d.compareTo(bound) < 0;
+        return d.compareTo(getWienerBound(n)) < 0;
     }
 
     public static BigInteger getWienerBound(BigInteger n) {
