@@ -2,3 +2,4 @@ readme.html
 bin/
 *.class
 TestRsaEngine.java
+.gitignore
