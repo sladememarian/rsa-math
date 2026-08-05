@@ -11,6 +11,18 @@ import java.util.List;
 
 public class CryptoIntegrationTest {
 
+    /**
+     * Assertion helper that always runs its check, regardless of whether the
+     * JVM was launched with -ea. Native `assert` statements are silently
+     * skipped without -ea, which would make every test report PASSED even
+     * if the underlying logic were broken.
+     */
+    private static void check(boolean condition, String message) {
+        if (!condition) {
+            throw new AssertionError(message);
+        }
+    }
+
     public static void main(String[] args) {
         System.out.println("=== Crypto Integration Test Suite ===\n");
         
@@ -21,14 +33,14 @@ public class CryptoIntegrationTest {
         System.out.println("Test 1: RSA Key Generation (1024-bit)");
         try {
             RsaKeyGenerator.RsaKeyPair keyPair = RsaKeyGenerator.generateKeyPair(1024);
-            assert keyPair.n.bitLength() == 1024 : "Key size mismatch";
-            assert keyPair.e.equals(BigInteger.valueOf(65537)) : "Public exponent mismatch";
-            assert keyPair.d.compareTo(BigInteger.ZERO) > 0 : "Private exponent not positive";
-            assert keyPair.p.compareTo(BigInteger.ZERO) > 0 && keyPair.q.compareTo(BigInteger.ZERO) > 0 : "Primes not positive";
-            System.out.println("  ✓ PASSED");
+            check(keyPair.n.bitLength() == 1024, "Key size mismatch");
+            check(keyPair.e.equals(BigInteger.valueOf(65537)), "Public exponent mismatch");
+            check(keyPair.d.compareTo(BigInteger.ZERO) > 0, "Private exponent not positive");
+            check(keyPair.p.compareTo(BigInteger.ZERO) > 0 && keyPair.q.compareTo(BigInteger.ZERO) > 0, "Primes not positive");
+            System.out.println("  PASSED");
             passed++;
         } catch (Exception e) {
-            System.out.println("  ✗ FAILED: " + e.getMessage());
+            System.out.println("  FAILED: " + e.getMessage());
             failed++;
         }
 
@@ -42,11 +54,11 @@ public class CryptoIntegrationTest {
             BigInteger encrypted = engine.encrypt(plaintext);
             BigInteger decrypted = engine.decrypt(encrypted);
             
-            assert plaintext.equals(decrypted) : "Number decrypt mismatch";
-            System.out.println("  ✓ PASSED");
+            check(plaintext.equals(decrypted), "Number decrypt mismatch");
+            System.out.println("  PASSED");
             passed++;
         } catch (Exception e) {
-            System.out.println("  ✗ FAILED: " + e.getMessage());
+            System.out.println("  FAILED: " + e.getMessage());
             failed++;
         }
 
@@ -60,11 +72,11 @@ public class CryptoIntegrationTest {
             List<BigInteger> encrypted = engine.encryptText(plaintext);
             String decrypted = engine.decryptText(encrypted);
             
-            assert plaintext.equals(decrypted) : "Text decrypt mismatch";
-            System.out.println("  ✓ PASSED");
+            check(plaintext.equals(decrypted), "Text decrypt mismatch");
+            System.out.println("  PASSED");
             passed++;
         } catch (Exception e) {
-            System.out.println("  ✗ FAILED: " + e.getMessage());
+            System.out.println("  FAILED: " + e.getMessage());
             failed++;
         }
 
@@ -78,11 +90,11 @@ public class CryptoIntegrationTest {
             List<BigInteger> encrypted = engine.encryptText(persianText);
             String decrypted = engine.decryptText(encrypted);
             
-            assert persianText.equals(decrypted) : "Persian text decrypt mismatch";
-            System.out.println("  ✓ PASSED");
+            check(persianText.equals(decrypted), "Persian text decrypt mismatch");
+            System.out.println("  PASSED");
             passed++;
         } catch (Exception e) {
-            System.out.println("  ✗ FAILED: " + e.getMessage());
+            System.out.println("  FAILED: " + e.getMessage());
             failed++;
         }
 
@@ -96,16 +108,16 @@ public class CryptoIntegrationTest {
             BigInteger signature = ds.sign(message);
             boolean verified = ds.verify(message, signature);
             
-            assert verified : "Valid signature not verified";
+            check(verified, "Valid signature not verified");
             
             BigInteger wrongMessage = new BigInteger("11111111111111111111");
             boolean wrongVerified = ds.verify(wrongMessage, signature);
-            assert !wrongVerified : "Invalid signature incorrectly verified";
+            check(!wrongVerified, "Invalid signature incorrectly verified");
             
-            System.out.println("  ✓ PASSED");
+            System.out.println("  PASSED");
             passed++;
         } catch (Exception e) {
-            System.out.println("  ✗ FAILED: " + e.getMessage());
+            System.out.println("  FAILED: " + e.getMessage());
             failed++;
         }
 
@@ -119,15 +131,15 @@ public class CryptoIntegrationTest {
             BigInteger signature = ds.signText(message);
             boolean verified = ds.verifyText(message, signature);
             
-            assert verified : "Valid text signature not verified";
+            check(verified, "Valid text signature not verified");
             
             boolean wrongVerified = ds.verifyText("Different message!", signature);
-            assert !wrongVerified : "Invalid text signature incorrectly verified";
+            check(!wrongVerified, "Invalid text signature incorrectly verified");
             
-            System.out.println("  ✓ PASSED");
+            System.out.println("  PASSED");
             passed++;
         } catch (Exception e) {
-            System.out.println("  ✗ FAILED: " + e.getMessage());
+            System.out.println("  FAILED: " + e.getMessage());
             failed++;
         }
 
@@ -141,16 +153,16 @@ public class CryptoIntegrationTest {
             List<BigInteger> signatures = ds.signTextBlocks(longMessage);
             boolean verified = ds.verifyTextBlocks(longMessage, signatures);
             
-            assert verified : "Block signatures not verified";
+            check(verified, "Block signatures not verified");
             
             String tampered = longMessage + " tampered";
             boolean wrongVerified = ds.verifyTextBlocks(tampered, signatures);
-            assert !wrongVerified : "Tampered message incorrectly verified";
+            check(!wrongVerified, "Tampered message incorrectly verified");
             
-            System.out.println("  ✓ PASSED");
+            System.out.println("  PASSED");
             passed++;
         } catch (Exception e) {
-            System.out.println("  ✗ FAILED: " + e.getMessage());
+            System.out.println("  FAILED: " + e.getMessage());
             failed++;
         }
 
@@ -166,15 +178,15 @@ public class CryptoIntegrationTest {
             BigInteger d = new BigInteger("11");
             BigInteger e = com.rsa.math.EuclideanMath.modInverse(d, phi);
             
-            assert WienerAttack.isVulnerable(d, n) : "Key should be vulnerable";
+            check(WienerAttack.isVulnerable(d, n), "Key should be vulnerable");
             
             BigInteger recoveredD = WienerAttack.solve(e, n);
-            assert recoveredD != null && recoveredD.equals(d) : "Wiener attack failed to recover d";
+            check(recoveredD != null && recoveredD.equals(d), "Wiener attack failed to recover d");
             
-            System.out.println("  ✓ PASSED");
+            System.out.println("  PASSED");
             passed++;
         } catch (Exception e) {
-            System.out.println("  ✗ FAILED: " + e.getMessage());
+            System.out.println("  FAILED: " + e.getMessage());
             failed++;
         }
 
@@ -183,15 +195,15 @@ public class CryptoIntegrationTest {
         try {
             RsaKeyGenerator.RsaKeyPair keyPair = RsaKeyGenerator.generateKeyPair(1024);
             
-            assert !WienerAttack.isVulnerable(keyPair.d, keyPair.n) : "Standard key should not be vulnerable";
+            check(!WienerAttack.isVulnerable(keyPair.d, keyPair.n), "Standard key should not be vulnerable");
             
             BigInteger recoveredD = WienerAttack.solve(keyPair.e, keyPair.n);
-            assert recoveredD == null : "Wiener attack incorrectly succeeded on secure key";
+            check(recoveredD == null, "Wiener attack incorrectly succeeded on secure key");
             
-            System.out.println("  ✓ PASSED");
+            System.out.println("  PASSED");
             passed++;
         } catch (Exception e) {
-            System.out.println("  ✗ FAILED: " + e.getMessage());
+            System.out.println("  FAILED: " + e.getMessage());
             failed++;
         }
 
@@ -202,11 +214,11 @@ public class CryptoIntegrationTest {
             List<BigInteger> blocks = TextEncoder.encodeBlocks(text, 1024);
             String decoded = TextEncoder.decodeBlocks(blocks);
             
-            assert text.equals(decoded) : "Block encode/decode mismatch";
-            System.out.println("  ✓ PASSED");
+            check(text.equals(decoded), "Block encode/decode mismatch");
+            System.out.println("  PASSED");
             passed++;
         } catch (Exception e) {
-            System.out.println("  ✗ FAILED: " + e.getMessage());
+            System.out.println("  FAILED: " + e.getMessage());
             failed++;
         }
 
@@ -217,15 +229,15 @@ public class CryptoIntegrationTest {
             EccComparison.BenchmarkResult rsaResult = EccComparison.benchmarkRSA(512, 1);
             EccComparison.BenchmarkResult eccResult = EccComparison.benchmarkECC(256, 1);
             
-            assert rsaResult.keyGenTimeMs > 0 : "RSA keygen time not recorded";
-            assert eccResult.keyGenTimeMs > 0 : "ECC keygen time not recorded";
-            assert rsaResult.signTimeMs >= 0 : "RSA sign time not recorded";
-            assert eccResult.signTimeMs >= 0 : "ECC sign time not recorded";
+            check(rsaResult.keyGenTimeMs > 0, "RSA keygen time not recorded");
+            check(eccResult.keyGenTimeMs > 0, "ECC keygen time not recorded");
+            check(rsaResult.signTimeMs >= 0, "RSA sign time not recorded");
+            check(eccResult.signTimeMs >= 0, "ECC sign time not recorded");
             
-            System.out.println("  ✓ PASSED");
+            System.out.println("  PASSED");
             passed++;
         } catch (Exception e) {
-            System.out.println("  ✗ FAILED: " + e.getMessage());
+            System.out.println("  FAILED: " + e.getMessage());
             failed++;
         }
 
@@ -246,16 +258,16 @@ public class CryptoIntegrationTest {
             
             // Verify signatures
             boolean verified = ds.verifyTextBlocks(originalMessage, signatures);
-            assert verified : "Signatures not verified";
+            check(verified, "Signatures not verified");
             
             // Decrypt
             String decrypted = engine.decryptText(encrypted);
-            assert originalMessage.equals(decrypted) : "End-to-end decrypt mismatch";
+            check(originalMessage.equals(decrypted), "End-to-end decrypt mismatch");
             
-            System.out.println("  ✓ PASSED");
+            System.out.println("  PASSED");
             passed++;
         } catch (Exception e) {
-            System.out.println("  ✗ FAILED: " + e.getMessage());
+            System.out.println("  FAILED: " + e.getMessage());
             failed++;
         }
 

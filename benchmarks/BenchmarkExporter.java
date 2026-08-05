@@ -30,7 +30,7 @@ public class BenchmarkExporter {
 
         for (FactorizationBenchmark.BenchmarkResult res : results) {
             int bars = (int) Math.min(Math.ceil(res.pollardRhoMs * 2), 50);
-            String barStr = "█".repeat(Math.max(1, bars));
+            String barStr = "#".repeat(Math.max(1, bars));
             System.out.printf("%9d-bit | %-50s (%.3f ms)%n", res.bitSize, barStr, res.pollardRhoMs);
         }
         System.out.println("================================================--------------------\n");

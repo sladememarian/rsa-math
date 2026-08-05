@@ -189,11 +189,11 @@ public class EccComparison {
 
         System.out.println("=".repeat(120));
         System.out.println("\nEquivalent Security Levels (NIST SP 800-57):");
-        System.out.println("RSA-1024  ≈ ECC-160  (80-bit security)  - DEPRECATED");
-        System.out.println("RSA-2048  ≈ ECC-224  (112-bit security)");
-        System.out.println("RSA-3072  ≈ ECC-256  (128-bit security)");
-        System.out.println("RSA-7680  ≈ ECC-384  (192-bit security)");
-        System.out.println("RSA-15360 ≈ ECC-521  (256-bit security)");
+        System.out.println("RSA-1024  ~ ECC-160  (80-bit security)  - DEPRECATED");
+        System.out.println("RSA-2048  ~ ECC-224  (112-bit security)");
+        System.out.println("RSA-3072  ~ ECC-256  (128-bit security)");
+        System.out.println("RSA-7680  ~ ECC-384  (192-bit security)");
+        System.out.println("RSA-15360 ~ ECC-521  (256-bit security)");
     }
 
     public static void main(String[] args) {
